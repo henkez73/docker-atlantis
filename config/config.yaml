@@ -1,0 +1,13 @@
+gh-hostname: github.com
+gh-user: woodonggyu
+gh-token:
+gh-webhook-secret:
+port: 80
+repo-config: /etc/atlantis/repos.yaml
+repo-whitelist: github.com/terragrunt-aws-wafv2
+slack-token:
+webhooks:
+  - event: apply
+    workspace-regex: .*
+    kind: slack
+    channel:

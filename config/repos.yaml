@@ -1,0 +1,40 @@
+repos:
+  # id can either be an exact repo ID or a regex.
+  # If using a regex, it must start and end with a slash.
+  # Repo ID's are of the form {VCS hostname}/{org}/{repo name}, ex.
+  # github.com/runatlantis/atlantis.
+- id: /.*/
+
+  # apply_requirements sets the Apply Requirements for all repos that match.
+  apply_requirements: [approved]
+
+  # allowed_overrides specifies which keys can be overridden by this repo in
+  # its atlantis.yaml file.
+  allowed_overrides: [apply_requirements, workflow]
+
+  # allow_custom_workflows defines whether this repo can define its own
+  # workflows. If false (default), the repo can only use server-side defined
+  # workflows.
+  allow_custom_workflows: true
+
+  # delete_source_branch_on_merge defines whether the source branch would be deleted on merge
+  # If false (default), the source branch won't be deleted on merge
+  delete_source_branch_on_merge: true
+
+workflows:
+  deploy:
+    plan:
+      steps:
+        - run: terragrunt plan -no-color -out=$PLANFILE
+    apply:
+      steps:
+        - run: terragrunt apply -no-color $PLANFILE
+
+policies:
+  owners:
+    users:
+      - woodonggyu
+  policy_sets:
+    - name: example-conf-tests
+      path: /etc/atlantis/null_resource_warning/  # Consider separate vcs & mount into container
+      source: local
