@@ -22,6 +22,13 @@ repos:
   delete_source_branch_on_merge: true
 
 workflows:
+  deploy-env:
+    plan:
+      steps:
+        - run: terragrunt run-all plan -no-color -out=$PLANFILE
+    apply:
+      steps:
+        - run: terragrunt run-all apply -no-color $PLANFILE --terragrunt-non-interactive
   deploy:
     plan:
       steps:
