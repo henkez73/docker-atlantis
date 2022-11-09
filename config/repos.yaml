@@ -25,23 +25,14 @@ workflows:
   deploy-env:
     plan:
       steps:
-        - run: terragrunt run-all plan -no-color -out=$PLANFILE
+        - run: terragrunt run-all plan -no-color -out plan.out
     apply:
       steps:
-        - run: terragrunt run-all apply -no-color $PLANFILE --terragrunt-non-interactive
+        - run: terragrunt run-all apply -no-color plan.out --terragrunt-non-interactive
   deploy:
     plan:
       steps:
-        - run: terragrunt plan -no-color -out=$PLANFILE
+        - run: terragrunt plan -no-color -out plan.out
     apply:
       steps:
-        - run: terragrunt apply -no-color $PLANFILE
-
-policies:
-  owners:
-    users:
-      - woodonggyu
-  policy_sets:
-    - name: example-conf-tests
-      path: /etc/atlantis/null_resource_warning/  # Consider separate vcs & mount into container
-      source: local
+        - run: terragrunt apply -no-color plan.out --terragrunt-non-interactive
